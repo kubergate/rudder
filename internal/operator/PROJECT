@@ -1,0 +1,6 @@
+domain: nomadxd.io
+layout:
+- go.kubebuilder.io/v4-alpha
+projectName: operator
+repo: github.com/NomadXD/dragonfly
+version: "3"
