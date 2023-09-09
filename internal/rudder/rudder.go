@@ -5,15 +5,15 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/NomadXD/dragonfly/internal/operator"
-	"github.com/NomadXD/dragonfly/internal/server"
+	"github.com/KommodoreX/dp-rudder/internal/controllers"
+	"github.com/KommodoreX/dp-rudder/internal/server"
 )
 
 func Init() {
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, os.Interrupt, syscall.SIGTERM)
- 
-	go operator.InitOperator()
+
+	go controllers.InitControllers()
 	go server.InitServer()
 
 	for s := range sig {

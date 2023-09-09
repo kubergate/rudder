@@ -19,7 +19,7 @@ package controllers
 import (
 	"context"
 
-	"github.com/NomadXD/dragonfly/pkg/logger"
+	"github.com/KommodoreX/dp-rudder/pkg/logger"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
@@ -31,16 +31,16 @@ import (
 
 // HttpRouteReconciler reconciles a HttpRoute object
 type HttpRouteReconciler struct {
-	Client client.Client
+	Client  client.Client
 	Manager manager.Manager
 }
 
 func NewHTTPRouteController(mgr manager.Manager) error {
 	httpRouteReconciler := &HttpRouteReconciler{
-		Client: mgr.GetClient(),
+		Client:  mgr.GetClient(),
 		Manager: mgr,
 	}
-	c, err:= controller.New("HTTPRoute", mgr, controller.Options{Reconciler: httpRouteReconciler})
+	c, err := controller.New("HTTPRoute", mgr, controller.Options{Reconciler: httpRouteReconciler})
 	if err != nil {
 		return err
 	}
@@ -64,9 +64,9 @@ func NewHTTPRouteController(mgr manager.Manager) error {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.13.0/pkg/reconcile
 func (r *HttpRouteReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	var httpRoute gwapiv1b1.HTTPRoute 
-	if err:= r.Client.Get(ctx,req.NamespacedName, &httpRoute); err != nil {
-		logger.LoggerDragonFly.Sugar().Errorf("Error reconciling HTTPRoute CR:",err.Error())
+	var httpRoute gwapiv1b1.HTTPRoute
+	if err := r.Client.Get(ctx, req.NamespacedName, &httpRoute); err != nil {
+		logger.LoggerDragonFly.Sugar().Errorf("Error reconciling HTTPRoute CR:", err.Error())
 	}
 	logger.LoggerDragonFly.Sugar().Infof("HTTPRoute name: %v", httpRoute.Name)
 	return ctrl.Result{}, nil
