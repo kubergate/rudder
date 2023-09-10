@@ -5,6 +5,7 @@ import (
 	"net"
 	"strconv"
 
+	v1alpha1 "github.com/KommodoreX/dp-rudder/api/v1alpha1/config"
 	"github.com/KommodoreX/dp-rudder/internal/xds/cache"
 	"github.com/KommodoreX/dp-rudder/pkg/logger"
 	clusterv3 "github.com/envoyproxy/go-control-plane/envoy/service/cluster/v3"
@@ -21,17 +22,26 @@ import (
 const XdsServerAddress = "0.0.0.0"
 
 type XdsServer struct {
-	grpc  *grpc.Server
-	cache cache.SnapshotCacheWithCallbacks
+	config *v1alpha1.XdsServerConfig
+	grpc   *grpc.Server
+	cache  cache.SnapshotCacheWithCallbacks
 }
 
-// func InitXdsServer(config) error {
-
-// }
+func InitXdsServer(ctx context.Context, config *v1alpha1.XdsServerConfig) error {
+	xds := XdsServer{
+		config: config,
+	}
+	err := xds.Run(ctx)
+	if err != nil {
+		logger.LoggerRudder.Base().Error(err.Error())
+		return err
+	}
+	return nil
+}
 
 func (xds *XdsServer) Run(ctx context.Context) error {
 	xds.grpc = grpc.NewServer()
-	xds.cache = cache.NewSnapshotCache(true, logger.LoggerDragonFly)
+	xds.cache = cache.NewSnapshotCache(true, logger.LoggerRudder)
 	registerServer(serverv3.NewServer(ctx, xds.cache, xds.cache), xds.grpc)
 	go xds.serveXdsServer(ctx)
 	return nil
@@ -54,16 +64,17 @@ func (xds *XdsServer) serveXdsServer(ctx context.Context) {
 	addr := net.JoinHostPort(XdsServerAddress, strconv.Itoa(9200))
 	l, err := net.Listen("tcp", addr)
 	if err != nil {
-		logger.LoggerDragonFly.Sugar().Error(err, "failed to listen on address", "address", addr)
+		logger.LoggerRudder.Sugar().Error(err, "failed to listen on address", "address", addr)
 		return
 	}
+	logger.LoggerRudder.Base().Info("Starting xDS gRPC server on :9200")
 	err = xds.grpc.Serve(l)
 	if err != nil {
-		logger.LoggerDragonFly.Sugar().Error(err, "failed to start grpc based xds server")
+		logger.LoggerRudder.Sugar().Error(err, "failed to start grpc based xds server")
 	}
 
 	<-ctx.Done()
-	logger.LoggerDragonFly.Sugar().Info("grpc server shutting down")
+	logger.LoggerRudder.Sugar().Info("grpc server shutting down")
 	// We don't use GracefulStop here because envoy
 	// has long-lived hanging xDS requests. There's no
 	// mechanism to make those pending requests fail,

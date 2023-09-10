@@ -65,7 +65,7 @@ func InitControllers() {
 			"Enabling this will ensure there is only one active controller manager.")
 	flag.Parse()
 
-	ctrl.SetLogger(zapr.NewLogger(logger.LoggerDragonFly.Base()))
+	ctrl.SetLogger(zapr.NewLogger(logger.LoggerRudder.Base()))
 
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:                 newScheme,

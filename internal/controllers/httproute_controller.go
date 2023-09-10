@@ -66,8 +66,8 @@ func NewHTTPRouteController(mgr manager.Manager) error {
 func (r *HttpRouteReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	var httpRoute gwapiv1b1.HTTPRoute
 	if err := r.Client.Get(ctx, req.NamespacedName, &httpRoute); err != nil {
-		logger.LoggerDragonFly.Sugar().Errorf("Error reconciling HTTPRoute CR:", err.Error())
+		logger.LoggerRudder.Sugar().Errorf("Error reconciling HTTPRoute CR:", err.Error())
 	}
-	logger.LoggerDragonFly.Sugar().Infof("HTTPRoute name: %v", httpRoute.Name)
+	logger.LoggerRudder.Sugar().Infof("HTTPRoute name: %v", httpRoute.Name)
 	return ctrl.Result{}, nil
 }

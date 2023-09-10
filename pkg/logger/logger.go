@@ -14,9 +14,10 @@ import (
 
 type Logger struct {
 	baseLogger *zap.Logger
+	sugar      *zap.SugaredLogger
 }
 
-var LoggerDragonFly Logger
+var LoggerRudder Logger
 
 func InitLogger() {
 	encoderCfg := zap.NewProductionEncoderConfig()
@@ -41,11 +42,13 @@ func InitLogger() {
 			"pid": os.Getpid(),
 		},
 	}
-	LoggerDragonFly.baseLogger = zap.Must(config.Build())
+	logger := zap.Must(config.Build())
+	LoggerRudder.baseLogger = logger
+	LoggerRudder.sugar = logger.Sugar()
 }
 
 func (l *Logger) Sugar() *zap.SugaredLogger {
-	return l.Sugar()
+	return l.sugar
 }
 
 func (l *Logger) Base() *zap.Logger {

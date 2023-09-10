@@ -17,7 +17,7 @@ limitations under the License.
 // Package v1alpha1 contains API Schema definitions for the dragonfly v1alpha1 API group
 // +kubebuilder:object:generate=true
 // +groupName=dragonfly.nomadxd.io
-package config
+package v1alpha1
 
 import (
 	"k8s.io/apimachinery/pkg/runtime/schema"

@@ -1,0 +1,16 @@
+apiVersion: config.rudder.kommodore.io/v1alpha1
+kind: Rudder
+metadata:
+  name: RudderConfig
+spec:
+  gatewayController:
+    controllerNames:
+      - rudder.kommodore.io/gatewayclass-controller-1
+      - rudder.kommodore.io/gatewayclass-controller-2
+  xdsServerConfig:
+    xdsMode: XDS_DELTA
+  kubernetesWatchConfig:
+    namespaces:
+      - kommodore-ns-1
+      - kommodore-ns-2 
+  

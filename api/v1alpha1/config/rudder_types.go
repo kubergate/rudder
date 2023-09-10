@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package config
+package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,8 +28,11 @@ type RudderSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of Helm. Edit helm_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	GatewayController *GatewayController `json:"gatewayController,omitempty"`
+
+	XdsServerConfig *XdsServerConfig `json:"xdsServerConfig,omitempty"`
+
+	KubernetesWatchConfig *KubernetesWatchConfig `json:"kubernetesWatchConfig,omitempty"`
 }
 
 // HelmStatus defines the observed state of Helm
@@ -57,6 +60,18 @@ type RudderList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []Rudder `json:"items"`
+}
+
+type GatewayController struct {
+	ControllerNames []string `json:"controllerNames,omitempty"`
+}
+
+type XdsServerConfig struct {
+	XdsMode string `json:"xdsMode,omitempty"`
+}
+
+type KubernetesWatchConfig struct {
+	Namespaces []string `json:"namespaces,omitempty"`
 }
 
 func init() {
