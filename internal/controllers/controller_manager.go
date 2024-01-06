@@ -28,7 +28,7 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	gwapiv1b1 "sigs.k8s.io/gateway-api/apis/v1beta1"
 
-	"github.com/KommodoreX/dp-rudder/pkg/logger"
+	"github.com/kubergate/rudder/pkg/logger"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -36,8 +36,8 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 
-	rudderv1alpha1 "github.com/KommodoreX/dp-rudder/api/v1alpha1"
-	config "github.com/KommodoreX/dp-rudder/api/v1alpha1/config"
+	rudderv1alpha1 "github.com/kubergate/rudder/api/v1alpha1"
+	config "github.com/kubergate/rudder/api/v1alpha1/config"
 	//+kubebuilder:scaffold:imports
 )
 

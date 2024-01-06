@@ -19,7 +19,7 @@ package controllers
 import (
 	"context"
 
-	"github.com/KommodoreX/dp-rudder/pkg/logger"
+	"github.com/kubergate/rudder/pkg/logger"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller"

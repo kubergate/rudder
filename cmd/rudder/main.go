@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/KommodoreX/dp-rudder/internal/config"
-	rudder "github.com/KommodoreX/dp-rudder/internal/rudder"
-	"github.com/KommodoreX/dp-rudder/pkg/logger"
+	"github.com/kubergate/rudder/internal/config"
+	rudder "github.com/kubergate/rudder/internal/rudder"
+	"github.com/kubergate/rudder/pkg/logger"
 )
 
 func main() {

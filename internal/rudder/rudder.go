@@ -6,10 +6,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	v1alpha1 "github.com/KommodoreX/dp-rudder/api/v1alpha1/config"
-	"github.com/KommodoreX/dp-rudder/internal/controllers"
-	"github.com/KommodoreX/dp-rudder/internal/server"
-	xds "github.com/KommodoreX/dp-rudder/internal/xds/server"
+	v1alpha1 "github.com/kubergate/rudder/api/v1alpha1/config"
+	"github.com/kubergate/rudder/internal/controllers"
+	"github.com/kubergate/rudder/internal/server"
+	xds "github.com/kubergate/rudder/internal/xds/server"
 )
 
 func Init(config v1alpha1.Rudder) {

@@ -1,7 +1,7 @@
 package datastore
 
 import (
-	"github.com/KommodoreX/dp-rudder/pkg/rudder/types"
+	"github.com/kubergate/rudder/pkg/rudder/types"
 )
 
 const HTTPRouteBucket = "bkt_HTTPRoute"

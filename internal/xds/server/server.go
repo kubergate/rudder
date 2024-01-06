@@ -5,9 +5,6 @@ import (
 	"net"
 	"strconv"
 
-	v1alpha1 "github.com/KommodoreX/dp-rudder/api/v1alpha1/config"
-	"github.com/KommodoreX/dp-rudder/internal/xds/cache"
-	"github.com/KommodoreX/dp-rudder/pkg/logger"
 	clusterv3 "github.com/envoyproxy/go-control-plane/envoy/service/cluster/v3"
 	discoveryv3 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v3"
 	endpointv3 "github.com/envoyproxy/go-control-plane/envoy/service/endpoint/v3"
@@ -16,6 +13,9 @@ import (
 	runtimev3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	secretv3 "github.com/envoyproxy/go-control-plane/envoy/service/secret/v3"
 	serverv3 "github.com/envoyproxy/go-control-plane/pkg/server/v3"
+	v1alpha1 "github.com/kubergate/rudder/api/v1alpha1/config"
+	"github.com/kubergate/rudder/internal/xds/cache"
+	"github.com/kubergate/rudder/pkg/logger"
 	"google.golang.org/grpc"
 )
 

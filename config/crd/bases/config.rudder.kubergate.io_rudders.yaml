@@ -1,0 +1,73 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.9.2
+  creationTimestamp: null
+  name: rudders.config.rudder.kubergate.io
+spec:
+  group: config.rudder.kubergate.io
+  names:
+    kind: Rudder
+    listKind: RudderList
+    plural: rudders
+    singular: rudder
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Rudder is the Schema for the helms API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: RudderSpec defines the desired state of Helm
+            properties:
+              dataStoreConfig:
+                properties:
+                  dbPath:
+                    type: string
+                  timeout:
+                    format: int32
+                    type: integer
+                type: object
+              gatewayController:
+                properties:
+                  controllerNames:
+                    items:
+                      type: string
+                    type: array
+                type: object
+              kubernetesWatchConfig:
+                properties:
+                  namespaces:
+                    items:
+                      type: string
+                    type: array
+                type: object
+              xdsServerConfig:
+                properties:
+                  xdsMode:
+                    type: string
+                type: object
+            type: object
+          status:
+            description: RudderStatus defines the observed state of Helm
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

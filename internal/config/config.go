@@ -1,9 +1,9 @@
 package config
 
 import (
-	v1alpha1 "github.com/KommodoreX/dp-rudder/api/v1alpha1/config"
-	"github.com/KommodoreX/dp-rudder/pkg/config"
-	"github.com/KommodoreX/dp-rudder/pkg/logger"
+	v1alpha1 "github.com/kubergate/rudder/api/v1alpha1/config"
+	"github.com/kubergate/rudder/pkg/config"
+	"github.com/kubergate/rudder/pkg/logger"
 )
 
 func ReadConfigs(configFilePath string) (v1alpha1.Rudder, error) {
