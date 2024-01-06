@@ -23,7 +23,7 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// HelmSpec defines the desired state of Helm
+// RudderSpec defines the desired state of Helm
 type RudderSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
@@ -33,9 +33,11 @@ type RudderSpec struct {
 	XdsServerConfig *XdsServerConfig `json:"xdsServerConfig,omitempty"`
 
 	KubernetesWatchConfig *KubernetesWatchConfig `json:"kubernetesWatchConfig,omitempty"`
+
+	DataStoreConfig *DataStoreConfig `json:"dataStoreConfig,omitempty"`
 }
 
-// HelmStatus defines the observed state of Helm
+// RudderStatus defines the observed state of Helm
 type RudderStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
@@ -44,7 +46,7 @@ type RudderStatus struct {
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 
-// Helm is the Schema for the helms API
+// Rudder is the Schema for the helms API
 type Rudder struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -55,7 +57,7 @@ type Rudder struct {
 
 //+kubebuilder:object:root=true
 
-// HelmList contains a list of Helm
+// RudderList contains a list of Helm
 type RudderList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
@@ -72,6 +74,11 @@ type XdsServerConfig struct {
 
 type KubernetesWatchConfig struct {
 	Namespaces []string `json:"namespaces,omitempty"`
+}
+
+type DataStoreConfig struct {
+	DBPath  string `json:"dbPath,omitempty"`
+	Timeout int32  `json:"timeout,omitempty"`
 }
 
 func init() {

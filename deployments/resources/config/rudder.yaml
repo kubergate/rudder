@@ -13,4 +13,7 @@ spec:
     namespaces:
       - kommodore-ns-1
       - kommodore-ns-2 
+  dataStoreConfig:
+    dbPath: ./rudderdb
+    timeout: 300
   

@@ -12,6 +12,7 @@ require (
 	github.com/envoyproxy/go-control-plane v0.11.1
 	github.com/go-logr/zapr v1.2.4
 	github.com/spf13/viper v1.16.0
+	go.etcd.io/bbolt v1.3.7
 	google.golang.org/grpc v1.58.0
 )
 

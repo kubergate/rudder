@@ -36,7 +36,8 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 
-	dragonflyv1alpha1 "github.com/KommodoreX/dp-rudder/api/v1alpha1"
+	rudderv1alpha1 "github.com/KommodoreX/dp-rudder/api/v1alpha1"
+	config "github.com/KommodoreX/dp-rudder/api/v1alpha1/config"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -50,11 +51,11 @@ func init() {
 
 	utilruntime.Must(gwapiv1b1.AddToScheme(newScheme))
 
-	utilruntime.Must(dragonflyv1alpha1.AddToScheme(newScheme))
+	utilruntime.Must(rudderv1alpha1.AddToScheme(newScheme))
 	//+kubebuilder:scaffold:scheme
 }
 
-func InitControllers() {
+func InitControllers(config *config.DataStoreConfig) {
 	var metricsAddr string
 	var enableLeaderElection bool
 	var probeAddr string
@@ -89,6 +90,10 @@ func InitControllers() {
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")
 		os.Exit(1)
+	}
+
+	if err != nil {
+		logger.LoggerRudder.Base().Error(err.Error())
 	}
 
 	if err := NewHTTPRouteController(mgr); err != nil {

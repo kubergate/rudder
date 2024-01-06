@@ -40,7 +40,7 @@ func NewHTTPRouteController(mgr manager.Manager) error {
 		Client:  mgr.GetClient(),
 		Manager: mgr,
 	}
-	c, err := controller.New("HTTPRoute", mgr, controller.Options{Reconciler: httpRouteReconciler})
+	c, err := controller.New("HTTPRoute", mgr, controller.Options{Reconciler: httpRouteReconciler, MaxConcurrentReconciles: 1})
 	if err != nil {
 		return err
 	}
@@ -50,9 +50,9 @@ func NewHTTPRouteController(mgr manager.Manager) error {
 	return nil
 }
 
-//+kubebuilder:rbac:groups=dragonfly.nomadxd.io,resources=httproutes,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=dragonfly.nomadxd.io,resources=httproutes/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=dragonfly.nomadxd.io,resources=httproutes/finalizers,verbs=update
+//+kubebuilder:rbac:groups=rudder.kommodore.io,resources=httproutes,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=rudder.kommodore.io,resources=httproutes/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=rudder.kommodore.io,resources=httproutes/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.

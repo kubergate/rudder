@@ -15,6 +15,6 @@ func main() {
 	if err != nil {
 		logger.LoggerRudder.Base().Error(err.Error())
 	}
-	logger.LoggerRudder.Base().Info("Starting dragonfly....")
+	logger.LoggerRudder.Base().Info("Starting rudder....")
 	rudder.Init(config)
 }

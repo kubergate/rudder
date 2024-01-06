@@ -1,4 +1,4 @@
-package dragonfly
+package rudder
 
 import (
 	"context"
@@ -17,7 +17,7 @@ func Init(config v1alpha1.Rudder) {
 	signal.Notify(sig, os.Interrupt, syscall.SIGTERM)
 	ctx := context.Background()
 
-	go controllers.InitControllers()
+	go controllers.InitControllers(config.Spec.DataStoreConfig)
 	go server.InitServer()
 	go xds.InitXdsServer(ctx, config.Spec.XdsServerConfig)
 
