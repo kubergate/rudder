@@ -4,12 +4,9 @@ import (
 	"github.com/kubergate/rudder/pkg/rudder/types"
 )
 
-const HTTPRouteBucket = "bkt_HTTPRoute"
-
 // RudderKVStore interface defines the methods that any storage implementation should support.
-type RudderKVStore interface {
-	Add(key string, value types.Resource[interface{}]) error
-	Get(key string) (types.Resource[interface{}], error)
-	Update(key, value types.Resource[interface{}]) error
-	Delete(key string) error
+type RudderKVStore[Key comparable] interface {
+	Add(key Key, value types.Resource[any]) error
+	Get(key Key) (types.Resource[any], error)
+	Delete(key Key) error
 }

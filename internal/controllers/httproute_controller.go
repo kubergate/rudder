@@ -18,8 +18,10 @@ package controllers
 
 import (
 	"context"
-
+	"github.com/kubergate/rudder/internal/datastore"
 	"github.com/kubergate/rudder/pkg/logger"
+	k8serror "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
@@ -31,14 +33,16 @@ import (
 
 // HttpRouteReconciler reconciles a HttpRoute object
 type HttpRouteReconciler struct {
-	Client  client.Client
-	Manager manager.Manager
+	Client           client.Client
+	Manager          manager.Manager
+	HttpRouteKVStore *datastore.HttpRouteKVStore
 }
 
-func NewHTTPRouteController(mgr manager.Manager) error {
+func NewHTTPRouteController(mgr manager.Manager, httpRouteKVStore *datastore.HttpRouteKVStore) error {
 	httpRouteReconciler := &HttpRouteReconciler{
-		Client:  mgr.GetClient(),
-		Manager: mgr,
+		Client:           mgr.GetClient(),
+		Manager:          mgr,
+		HttpRouteKVStore: httpRouteKVStore,
 	}
 	c, err := controller.New("HTTPRoute", mgr, controller.Options{Reconciler: httpRouteReconciler, MaxConcurrentReconciles: 1})
 	if err != nil {
@@ -50,9 +54,9 @@ func NewHTTPRouteController(mgr manager.Manager) error {
 	return nil
 }
 
-//+kubebuilder:rbac:groups=rudder.kommodore.io,resources=httproutes,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=rudder.kommodore.io,resources=httproutes/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=rudder.kommodore.io,resources=httproutes/finalizers,verbs=update
+//+kubebuilder:rbac:groups=rudder.kubergate.io,resources=httproutes,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=rudder.kubergate.io,resources=httproutes/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=rudder.kubergate.io,resources=httproutes/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -66,8 +70,38 @@ func NewHTTPRouteController(mgr manager.Manager) error {
 func (r *HttpRouteReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	var httpRoute gwapiv1b1.HTTPRoute
 	if err := r.Client.Get(ctx, req.NamespacedName, &httpRoute); err != nil {
-		logger.LoggerRudder.Sugar().Errorf("Error reconciling HTTPRoute CR:", err.Error())
+		found := r.HttpRouteKVStore.Contains(types.NamespacedName{Name: req.Name, Namespace: req.Namespace})
+		if found && k8serror.IsNotFound(err) {
+			// TODO: Handle HttpRoute deletion using finalizers if required
+			err := r.HttpRouteKVStore.Delete(types.NamespacedName{Name: req.Name, Namespace: req.Namespace})
+			if err != nil {
+				return ctrl.Result{}, err
+			}
+			logger.LoggerRudder.Sugar().Infof("HttpRoute: %v deleted", req.NamespacedName)
+			return ctrl.Result{}, nil
+		}
+		// Ignore other errors
+		return ctrl.Result{}, nil
 	}
-	logger.LoggerRudder.Sugar().Infof("HTTPRoute name: %v", httpRoute.Name)
+
+	httpRouteInKVStore, ok := r.HttpRouteKVStore.Get(types.NamespacedName{Name: httpRoute.Name, Namespace: httpRoute.Namespace})
+	if !ok {
+		// TODO: Handle new HttpRoute logic
+		_, err := r.HttpRouteKVStore.Add(types.NamespacedName{Name: httpRoute.Name, Namespace: httpRoute.Namespace}, httpRoute)
+		if err != nil {
+			return ctrl.Result{}, err
+		}
+		logger.LoggerRudder.Sugar().Infof("HttpRoute added to HttpRouteKVStore: %v", httpRoute.Name)
+		return ctrl.Result{}, nil
+	}
+	if httpRoute.ObjectMeta.Generation > httpRouteInKVStore.ObjectMeta.Generation {
+		// TODO: Handle HttpRoute update logic
+		_, err := r.HttpRouteKVStore.Add(types.NamespacedName{Name: httpRoute.Name, Namespace: httpRoute.Namespace}, httpRoute)
+		if err != nil {
+			return ctrl.Result{}, err
+		}
+		logger.LoggerRudder.Sugar().Infof("HttpRoute updated in HttpRouteKVStore: %v", httpRoute.Name)
+		return ctrl.Result{}, nil
+	}
 	return ctrl.Result{}, nil
 }

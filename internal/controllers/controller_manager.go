@@ -18,6 +18,7 @@ package controllers
 
 import (
 	"flag"
+	"github.com/kubergate/rudder/internal/datastore"
 	"log"
 	"os"
 
@@ -96,7 +97,9 @@ func InitControllers(config *config.DataStoreConfig) {
 		logger.LoggerRudder.Base().Error(err.Error())
 	}
 
-	if err := NewHTTPRouteController(mgr); err != nil {
+	httpRouteKVStore := datastore.NewHttpRouteKVStore()
+
+	if err := NewHTTPRouteController(mgr, httpRouteKVStore); err != nil {
 		log.Fatalf("Error creating HTTPRoute controller")
 	}
 
